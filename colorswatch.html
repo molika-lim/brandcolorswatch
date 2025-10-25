@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editable Color Palettes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f8f8;
+        }
+        .color-swatch-container {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+        .color-swatch-container:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+        }
+        .text-on-light { color: #1f2937; } /* Dark Gray text for light backgrounds */
+        .text-on-dark { color: #f9fafb; } /* Light Gray text for dark backgrounds */
+        
+        .hex-input-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        .hex-input {
+            width: 100%;
+            border: none;
+            padding: 4px 8px;
+            font-size: 0.875rem; /* sm */
+            font-weight: 600; /* semibold */
+            text-transform: uppercase;
+            border-radius: 0.375rem;
+            outline: none;
+        }
+        .color-picker {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            border: none;
+            background: none;
+            margin-right: 4px;
+        }
+        .color-picker::-webkit-color-swatch-wrapper { padding: 0; }
+        .color-picker::-webkit-color-swatch { border: 1px solid #ccc; border-radius: 4px; }
+        .color-picker::-moz-color-swatch { border: 1px solid #ccc; border-radius: 4px; }
+        .dark-mode-bg-preview {
+            background-color: #2c3e50; /* Fallback for visual grouping */
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <div class="max-w-6xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-[#27567D] mb-2">Brand Color Palettes</h1>
+        <p class="text-xl text-gray-600 mb-10">Click on any color swatch or edit the hex code directly to customize your palettes.</p>
+
+        <div id="palettes-container" class="space-y-16">
+            <!-- Palettes will be rendered here by JavaScript -->
+        </div>
+
+    </div>
+
+    <script>
+        // Initial state of all color palettes
+        let palettes = [
+            {
+                id: 'p1',
+                title: 'Trust & Tranquility (Focus & Reliability)',
+                lightBg: '#F9F9F9',
+                darkBg: '#1A344D',
+                baseColor: '#27567D', // For border/title
+                colors: [
+                    { role: 'Primary', light: '#27567D', dark: '#6A9DC4', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Secondary', light: '#88CCC5', dark: '#C4E8E4', lightText: 'on-light', darkText: 'on-light' },
+                    { role: 'Accent', light: '#F0C419', dark: '#FFDA57', lightText: 'on-light', darkText: 'on-light' },
+                    { role: 'Alert', light: '#D84C3F', dark: '#FF7368', lightText: 'on-dark', darkText: 'on-dark' },
+                    { role: 'Base BG', light: '#F9F9F9', dark: '#1A344D', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'Text', light: '#4A4A4A', dark: '#F9F9F9', lightText: 'on-dark', darkText: 'on-light' },
+                ]
+            },
+            {
+                id: 'p2',
+                title: 'Enthusiasm & Growth (Motivation & Rewards)',
+                lightBg: '#FFFFFF',
+                darkBg: '#202020',
+                baseColor: '#3BA946',
+                colors: [
+                    { role: 'Primary', light: '#3BA946', dark: '#70D67D', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Secondary', light: '#FFFBE3', dark: '#4B4938', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'Accent', light: '#FF8C42', dark: '#FFAF73', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Text', light: '#373E4F', dark: '#A0A6B5', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Alert', light: '#E74C3C', dark: '#FF7A6C', lightText: 'on-dark', darkText: 'on-dark' },
+                    { role: 'Base BG', light: '#FFFFFF', dark: '#202020', lightText: 'on-light', darkText: 'on-dark' },
+                ]
+            },
+            {
+                id: 'p3',
+                title: 'Modern & Competitive (Clarity & Competition)',
+                lightBg: '#FFFFFF',
+                darkBg: '#1E293B',
+                baseColor: '#5D82A2',
+                colors: [
+                    { role: 'Primary', light: '#D0D7DB', dark: '#4F5C64', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'Secondary', light: '#5D82A2', dark: '#8CAAC7', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Accent', light: '#3498DB', dark: '#6ABFEF', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Victory', light: '#FFC300', dark: '#FFE366', lightText: 'on-light', darkText: 'on-light' },
+                    { role: 'Base BG', light: '#FFFFFF', dark: '#1E293B', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'Text', light: '#4A4A4A', dark: '#E0E0E0', lightText: 'on-dark', darkText: 'on-light' },
+                ]
+            },
+            {
+                id: 'p4',
+                title: 'Soft Minimalism & Serenity (Modern Aesthetic)',
+                lightBg: '#FFFFFF',
+                darkBg: '#333333',
+                baseColor: '#B5838D',
+                colors: [
+                    { role: 'Primary', light: '#EFEBE9', dark: '#45403E', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'Text', light: '#4A4A4A', dark: '#D0D0D0', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Accent', light: '#B5838D', dark: '#E9B8C2', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Success', light: '#88B04B', dark: '#B8D377', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Alert', light: '#E06A3E', dark: '#FF9E71', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Base BG', light: '#FFFFFF', dark: '#333333', lightText: 'on-light', darkText: 'on-dark' },
+                ]
+            },
+        ];
+
+        const palettesContainer = document.getElementById('palettes-container');
+
+        /**
+         * Converts RGB to Hex. Used internally for robustness, although color input provides hex.
+         * @param {string} c - Color component (0-255).
+         * @returns {string} Hex value.
+         */
+        const componentToHex = (c) => {
+            const hex = parseInt(c).toString(16);
+            return hex.length == 1 ? "0" + hex : hex;
+        }
+        
+        /**
+         * Ensures a string is a valid 6-digit hex code, padding or sanitizing as needed.
+         * @param {string} hex - The hex string to clean.
+         * @returns {string} A 6-digit uppercase hex code.
+         */
+        const cleanHex = (hex) => {
+            if (typeof hex !== 'string') return '#000000';
+            let cleaned = hex.startsWith('#') ? hex.substring(1) : hex;
+            cleaned = cleaned.toUpperCase().trim();
+            if (cleaned.length !== 6 || !/^[0-9A-F]{6}$/i.test(cleaned)) {
+                // If invalid, revert to a default or old value logic
+                return '#000000'; // Default safety fallback
+            }
+            return `#${cleaned}`;
+        }
+
+        /**
+         * Updates the color value in the data model and re-renders the specific swatch.
+         * @param {string} paletteId - ID of the palette.
+         * @param {string} role - Role of the color (e.g., 'Primary').
+         * @param {string} mode - 'light' or 'dark'.
+         * @param {string} newHex - The new hex color value.
+         */
+        const updateColor = (paletteId, role, mode, newHex) => {
+            const cleanedHex = cleanHex(newHex);
+
+            const paletteIndex = palettes.findIndex(p => p.id === paletteId);
+            if (paletteIndex === -1) return;
+
+            const colorIndex = palettes[paletteIndex].colors.findIndex(c => c.role === role);
+            if (colorIndex === -1) return;
+
+            // Update the data model
+            palettes[paletteIndex].colors[colorIndex][mode] = cleanedHex;
+
+            // Update the UI element directly
+            const swatchElement = document.getElementById(`${paletteId}-${role}-${mode}-swatch`);
+            const hexTextElement = document.getElementById(`${paletteId}-${role}-${mode}-hex`);
+            const colorPickerElement = document.getElementById(`${paletteId}-${role}-${mode}-picker`);
+
+            if (swatchElement) swatchElement.style.backgroundColor = cleanedHex;
+            if (hexTextElement) hexTextElement.value = cleanedHex.substring(1); // Set value without #
+            if (colorPickerElement) colorPickerElement.value = cleanedHex;
+
+            // Special handling for Base BG to update the whole container background
+            if (role === 'Base BG') {
+                const containerId = `${paletteId}-${mode}-container`;
+                const container = document.getElementById(containerId);
+                if (container) container.style.backgroundColor = cleanedHex;
+            }
+            // Update Base color if primary is changed
+            if (role === 'Primary' && mode === 'light') {
+                palettes[paletteIndex].baseColor = cleanedHex;
+                const titleElement = document.getElementById(`${paletteId}-title`);
+                const borderElement = document.getElementById(`${paletteId}-border`);
+                if (titleElement) titleElement.style.color = cleanedHex;
+                if (borderElement) borderElement.style.borderTopColor = cleanedHex;
+            }
+        };
+
+        /**
+         * Creates the HTML string for a single color swatch.
+         */
+        const createSwatchHtml = (palette, color, mode) => {
+            const hex = color[mode];
+            const textClass = color[`${mode}Text`] === 'on-dark' ? 'text-on-dark' : 'text-on-light';
+            const swatchId = `${palette.id}-${color.role}-${mode}-swatch`;
+            const hexId = `${palette.id}-${color.role}-${mode}-hex`;
+            const pickerId = `${palette.id}-${color.role}-${mode}-picker`;
+
+            return `
+                <div class="color-swatch-container rounded-lg overflow-hidden shadow-md bg-white">
+                    <div id="${swatchId}" class="h-24 flex items-end p-3" style="background-color: ${hex};">
+                        <div class="${textClass} text-xs font-semibold">${hex}</div>
+                    </div>
+                    <div class="p-3 bg-gray-50 dark-mode-detail-bg">
+                        <p class="font-medium text-gray-800 text-sm mb-1">${color.role}</p>
+                        <div class="hex-input-wrapper">
+                            <input type="color" id="${pickerId}" class="color-picker" value="${hex}" 
+                                oninput="updateColor('${palette.id}', '${color.role}', '${mode}', this.value)"
+                            >
+                            <input type="text" id="${hexId}" class="hex-input text-gray-700" value="${hex.substring(1)}" maxlength="6"
+                                onchange="updateColor('${palette.id}', '${color.role}', '${mode}', this.value)"
+                                oninput="this.value = this.value.toUpperCase().replace(/[^0-9A-F]/g, ''); if(this.value.length === 6) updateColor('${palette.id}', '${color.role}', '${mode}', '#' + this.value);"
+                            >
+                        </div>
+                    </div>
+                </div>
+            `;
+        };
+
+        /**
+         * Renders all palettes to the DOM.
+         */
+        const renderPalettes = () => {
+            palettesContainer.innerHTML = palettes.map(palette => {
+                const lightSwatches = palette.colors.map(color => createSwatchHtml(palette, color, 'light')).join('');
+                const darkSwatches = palette.colors.map(color => createSwatchHtml(palette, color, 'dark')).join('');
+
+                return `
+                    <!-- PALETTE: ${palette.title} -->
+                    <div id="${palette.id}-border" class="bg-white p-6 md:p-10 rounded-xl shadow-lg border-t-4" style="border-top-color: ${palette.baseColor};">
+                        <h2 id="${palette.id}-title" class="text-3xl font-bold mb-6" style="color: ${palette.baseColor};">${palette.title}</h2>
+                        
+                        <!-- LIGHT MODE -->
+                        <h3 class="text-xl font-bold mb-4 text-gray-700">Light Mode (Base BG: ${palette.lightBg})</h3>
+                        <div id="${palette.id}-light-container" class="p-6 rounded-xl shadow-inner border border-gray-200" style="background-color: ${palette.lightBg};">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+                                ${lightSwatches}
+                            </div>
+                        </div>
+
+                        <div class="my-8 h-px bg-gray-200"></div>
+
+                        <!-- DARK MODE -->
+                        <h3 class="text-xl font-bold mb-4 text-gray-700">Dark Mode (Base BG: ${palette.darkBg})</h3>
+                        <div id="${palette.id}-dark-container" class="p-6 rounded-xl shadow-inner border" style="background-color: ${palette.darkBg}; border-color: ${palette.baseColor};">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
+                                ${darkSwatches}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        };
+
+        // Initial render on load
+        window.onload = renderPalettes;
+        
+        // Expose updateColor globally for inline HTML event handlers
+        window.updateColor = updateColor;
+
+    </script>
+</body>
+</html>
