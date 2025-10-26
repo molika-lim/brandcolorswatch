@@ -127,6 +127,9 @@
                     { role: 'Alert', light: '#D84C3F', dark: '#FF7368', lightText: 'on-dark', darkText: 'on-dark' },
                     { role: 'Base BG', light: '#F9F9F9', dark: '#1A344D', lightText: 'on-light', darkText: 'on-dark' },
                     { role: 'Text', light: '#4A4A4A', dark: '#F9F9F9', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'To Do', light: '#3498DB', dark: '#6ABFEF', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'In Progress', light: '#F39C12', dark: '#FFC300', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Done', light: '#2ECC71', dark: '#58D68D', lightText: 'on-dark', darkText: 'on-light' },
                 ]
             },
             {
@@ -143,6 +146,9 @@
                     { role: 'Text', light: '#373E4F', dark: '#A0A6B5', lightText: 'on-dark', darkText: 'on-light' },
                     { role: 'Alert', light: '#E74C3C', dark: '#FF7A6C', lightText: 'on-dark', darkText: 'on-dark' },
                     { role: 'Base BG', light: '#FFFFFF', dark: '#202020', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'To Do', light: '#4A6FA5', dark: '#739EE1', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'In Progress', light: '#F0B34F', dark: '#FFD78F', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Done', light: '#3BA946', dark: '#70D67D', lightText: 'on-dark', darkText: 'on-light' },
                 ]
             },
             {
@@ -156,9 +162,13 @@
                     { role: 'Primary', light: '#D0D7DB', dark: '#4F5C64', lightText: 'on-light', darkText: 'on-dark' },
                     { role: 'Secondary', light: '#5D82A2', dark: '#8CAAC7', lightText: 'on-dark', darkText: 'on-light' },
                     { role: 'Accent', light: '#3498DB', dark: '#6ABFEF', lightText: 'on-dark', darkText: 'on-light' },
-                    { role: 'Victory', light: '#FFC300', dark: '#FFE366', lightText: 'on-light', darkText: 'on-light' },
+                    // CHANGED FROM 'Victory' to 'Success' for consistency
+                    { role: 'Success', light: '#FFC300', dark: '#FFE366', lightText: 'on-light', darkText: 'on-light' },
                     { role: 'Base BG', light: '#FFFFFF', dark: '#1E293B', lightText: 'on-light', darkText: 'on-dark' },
                     { role: 'Text', light: '#4A4A4A', dark: '#E0E0E0', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'To Do', light: '#4A6FA5', dark: '#8CAAC7', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'In Progress', light: '#FF8C42', dark: '#FFAF73', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Done', light: '#16A085', dark: '#58D68D', lightText: 'on-dark', darkText: 'on-light' },
                 ]
             },
             {
@@ -175,6 +185,30 @@
                     { role: 'Success', light: '#88B04B', dark: '#B8D377', lightText: 'on-dark', darkText: 'on-light' },
                     { role: 'Alert', light: '#E06A3E', dark: '#FF9E71', lightText: 'on-dark', darkText: 'on-light' },
                     { role: 'Base BG', light: '#FFFFFF', dark: '#333333', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'To Do', light: '#739EE1', dark: '#9EBFEF', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'In Progress', light: '#F7DC6F', dark: '#FFEB99', lightText: 'on-light', darkText: 'on-light' },
+                    { role: 'Done', light: '#68B684', dark: '#99DBC8', lightText: 'on-dark', darkText: 'on-light' },
+                ]
+            },
+            // --- NEW KIDS PALETTE (p5) ---
+            {
+                id: 'p5',
+                title: 'Playful & Energetic (Kids & Education)',
+                reason: 'A high-saturation, bright palette designed to capture and hold a child’s attention. The use of vibrant **primary and secondary colors** aids in cognitive development and makes the interface immediately engaging. High contrast is crucial for accessibility and clarity.',
+                lightBg: '#FFFFFF',
+                darkBg: '#2A2A44',
+                baseColor: '#FA6400',
+                colors: [
+                    { role: 'Primary', light: '#007AFF', dark: '#73BFFF', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Secondary', light: '#FFCC00', dark: '#FFEB70', lightText: 'on-light', darkText: 'on-light' },
+                    { role: 'Accent', light: '#FA6400', dark: '#FF9F61', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Success', light: '#34C759', dark: '#88E09D', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Alert', light: '#FF3B30', dark: '#FF736C', lightText: 'on-dark', darkText: 'on-dark' },
+                    { role: 'Base BG', light: '#FFFFFF', dark: '#2A2A44', lightText: 'on-light', darkText: 'on-dark' },
+                    { role: 'Text', light: '#2A2A2A', dark: '#F0F0F0', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'To Do', light: '#00C7E5', dark: '#70E7FF', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'In Progress', light: '#FF9500', dark: '#FFC35C', lightText: 'on-dark', darkText: 'on-light' },
+                    { role: 'Done', light: '#34C759', dark: '#88E09D', lightText: 'on-dark', darkText: 'on-light' },
                 ]
             },
         ];
@@ -299,10 +333,13 @@
             const swatchId = `${palette.id}-${color.role}-${mode}-swatch`;
             const hexId = `${palette.id}-${color.role}-${mode}-hex`;
             const pickerId = `${palette.id}-${color.role}-${mode}-picker`;
+            
+            // Determine size based on role (make status colors slightly less prominent)
+            const heightClass = ['To Do', 'In Progress', 'Done'].includes(color.role) ? 'h-20' : 'h-24';
 
             return `
                 <div class="color-swatch-container rounded-xl overflow-hidden shadow-md bg-white">
-                    <div id="${swatchId}" class="h-24 flex items-end p-3" style="background-color: ${hex};" 
+                    <div id="${swatchId}" class="${heightClass} flex items-end p-3" style="background-color: ${hex};" 
                         onclick="copyToClipboard('${hex}')">
                         <div class="${textClass} text-xs font-semibold">${hex}</div>
                     </div>
@@ -327,8 +364,15 @@
          */
         const renderPalettes = () => {
             palettesContainer.innerHTML = palettes.map(palette => {
-                const lightSwatches = palette.colors.map(color => createSwatchHtml(palette, color, 'light')).join('');
-                const darkSwatches = palette.colors.map(color => createSwatchHtml(palette, color, 'dark')).join('');
+                // Separate Core colors from Status colors for better grouping display
+                const coreColors = palette.colors.filter(c => !['To Do', 'In Progress', 'Done'].includes(c.role));
+                const statusColors = palette.colors.filter(c => ['To Do', 'In Progress', 'Done'].includes(c.role));
+                
+                const lightCoreSwatches = coreColors.map(color => createSwatchHtml(palette, color, 'light')).join('');
+                const darkCoreSwatches = coreColors.map(color => createSwatchHtml(palette, color, 'dark')).join('');
+                
+                const lightStatusSwatches = statusColors.map(color => createSwatchHtml(palette, color, 'light')).join('');
+                const darkStatusSwatches = statusColors.map(color => createSwatchHtml(palette, color, 'dark')).join('');
 
                 return `
                     <!-- PALETTE: ${palette.title} --><div id="${palette.id}-border" class="bg-white p-6 md:p-10 rounded-2xl shadow-xl border-t-8" style="border-top-color: ${palette.baseColor};">
@@ -338,8 +382,14 @@
 
                         <!-- LIGHT MODE --><h3 class="text-2xl font-semibold mb-4 text-gray-800">Light Mode</h3>
                         <div id="${palette.id}-light-container" class="p-6 rounded-xl shadow-inner border border-gray-100" style="background-color: ${palette.lightBg};">
+                            <!-- CORE COLORS --><p class="text-lg font-semibold text-gray-600 mb-3 border-b pb-2">Core Colors (UI, Text, Alerts)</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
+                                ${lightCoreSwatches}
+                            </div>
+
+                            <!-- STATUS COLORS --><p class="text-lg font-semibold text-gray-600 mb-3 border-b pb-2">Kanban Status Colors (To Do, In Progress, Done)</p>
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-                                ${lightSwatches}
+                                ${lightStatusSwatches}
                             </div>
                         </div>
 
@@ -347,8 +397,14 @@
 
                         <!-- DARK MODE --><h3 class="text-2xl font-semibold mb-4 text-gray-800">Dark Mode</h3>
                         <div id="${palette.id}-dark-container" class="p-6 rounded-xl shadow-inner border-2 border-dashed" style="background-color: ${palette.darkBg}; border-color: ${palette.baseColor};">
+                            <!-- CORE COLORS --><p class="text-lg font-semibold text-gray-300 mb-3 border-b pb-2">Core Colors (UI, Text, Alerts)</p>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 mb-8">
+                                ${darkCoreSwatches}
+                            </div>
+
+                            <!-- STATUS COLORS --><p class="text-lg font-semibold text-gray-300 mb-3 border-b pb-2">Kanban Status Colors (To Do, In Progress, Done)</p>
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
-                                ${darkSwatches}
+                                ${darkStatusSwatches}
                             </div>
                         </div>
                     </div>
