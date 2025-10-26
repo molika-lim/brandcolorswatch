@@ -5,65 +5,110 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editable Color Palettes</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
     <style>
+        /* General Body and Typography Polish */
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f8f8f8;
+            /* 1. Use Lora, an elegant serif, for ALL text */
+            font-family: 'Lora', serif; 
+            /* 2. Base color: Creamy paper background */
+            background-color: #fcf9ec; 
+            
+            /* 3. Stacked background images for notebook effect */
+            background-image: 
+                /* Margin Line (Vertical): Pinkish-red line 2px wide, positioned 50px from left */
+                linear-gradient(to right, #f29c9c 2px, transparent 2px),
+                /* Ruled Lines (Horizontal): Light blue line 1px wide */
+                linear-gradient(to bottom, #d4e7f8 1px, transparent 1px);
+
+            /* Sizing and Positioning for stacked backgrounds */
+            background-size: 2px 100%, 100% 24px; 
+            background-position: 50px 0, 0 0; 
+            background-repeat: no-repeat, repeat; 
         }
+        
+        /* Swatch Hover Effect - Added a slightly more pronounced visual cue for clickability */
         .color-swatch-container {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
         }
         .color-swatch-container:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.15), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
         }
-        .text-on-light { color: #1f2937; } /* Dark Gray text for light backgrounds */
-        .text-on-dark { color: #f9fafb; } /* Light Gray text for dark backgrounds */
         
+        /* Text Contrast for Swatches */
+        .text-on-light { color: #1f2937; } 
+        .text-on-dark { color: #f9fafb; } 
+        
+        /* Hex Input Styling */
         .hex-input-wrapper {
             display: flex;
             align-items: center;
+            border: 1px solid #e5e7eb; 
+            border-radius: 0.375rem;
+            padding: 2px;
         }
         .hex-input {
             width: 100%;
             border: none;
             padding: 4px 8px;
-            font-size: 0.875rem; /* sm */
-            font-weight: 600; /* semibold */
+            font-size: 0.875rem; 
+            font-weight: 600; 
             text-transform: uppercase;
+            background-color: white; 
             border-radius: 0.375rem;
             outline: none;
         }
         .color-picker {
             cursor: pointer;
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             padding: 0;
             border: none;
             background: none;
-            margin-right: 4px;
+            margin: 0 4px;
         }
         .color-picker::-webkit-color-swatch-wrapper { padding: 0; }
-        .color-picker::-webkit-color-swatch { border: 1px solid #ccc; border-radius: 4px; }
-        .color-picker::-moz-color-swatch { border: 1px solid #ccc; border-radius: 4px; }
-        .dark-mode-bg-preview {
-            background-color: #2c3e50; /* Fallback for visual grouping */
+        .color-picker::-webkit-color-swatch { border: 2px solid #ccc; border-radius: 6px; }
+        .color-picker::-moz-color-swatch { border: 2px solid #ccc; border-radius: 6px; }
+        
+        /* Custom Feedback Styles */
+        #clipboard-feedback {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 1rem 2rem;
+            background-color: #333;
+            color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            pointer-events: none;
+            z-index: 1000;
+        }
+        .show-feedback {
+            opacity: 1 !important;
         }
     </style>
 </head>
-<body class="p-4 md:p-8">
+<body class="p-4 md:p-12">
 
     <div class="max-w-6xl mx-auto">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-[#27567D] mb-2">Brand Color Palettes</h1>
-        <p class="text-xl text-gray-600 mb-10">Click on any color swatch or edit the hex code directly to customize your palettes.</p>
+        <h1 class="text-5xl md:text-6xl font-extrabold text-[#27567D] mb-3 tracking-tight">
+            Design System: Color Palettes
+        </h1>
+        <p class="text-xl text-gray-700 mb-12 border-b pb-4">Click on any color swatch or edit the hex code directly to customize your palettes.</p>
 
         <div id="palettes-container" class="space-y-16">
-            <!-- Palettes will be rendered here by JavaScript -->
-        </div>
+            <!-- Palettes will be rendered here by JavaScript --></div>
 
     </div>
+    
+    <!-- Clipboard Feedback Element -->
+    <div id="clipboard-feedback" class="text-lg font-semibold">Copied!</div>
 
     <script>
         // Initial state of all color palettes
@@ -71,6 +116,7 @@
             {
                 id: 'p1',
                 title: 'Trust & Tranquility (Focus & Reliability)',
+                reason: 'A professional and reliable scheme. **Blue** is linked to increased **focus and productivity**, as it can promote calming states. **Yellow** has the highest **visibility** on a dark background, making it an effective choice for important, alert-driven CTAs (calls-to-action).',
                 lightBg: '#F9F9F9',
                 darkBg: '#1A344D',
                 baseColor: '#27567D', // For border/title
@@ -86,6 +132,7 @@
             {
                 id: 'p2',
                 title: 'Enthusiasm & Growth (Motivation & Rewards)',
+                reason: 'An energetic and motivating palette. **Green** is highly **restful to the eye** and associated with progress and renewal, which can reduce eye strain. **Orange** is psychologically **stimulating** and represents enthusiasm and success, triggering motivational responses.',
                 lightBg: '#FFFFFF',
                 darkBg: '#202020',
                 baseColor: '#3BA946',
@@ -101,6 +148,7 @@
             {
                 id: 'p3',
                 title: 'Modern & Competitive (Clarity & Competition)',
+                reason: 'A high-contrast scheme. The use of **high contrast** (especially in dark mode) minimizes visual clutter and improves **readability**, reducing cognitive load. **Cool grays** provide a neutral field, allowing the **vibrant blue** accents to efficiently direct the user\'s visual attention.',
                 lightBg: '#FFFFFF',
                 darkBg: '#1E293B',
                 baseColor: '#5D82A2',
@@ -116,6 +164,7 @@
             {
                 id: 'p4',
                 title: 'Soft Minimalism & Serenity (Modern Aesthetic)',
+                reason: 'A muted, warm, and elegant design. **Warm, low-saturation tones** promote a sense of comfort and stability. This chromatic approach helps **reduce the perception of stress** often associated with bright, saturated interfaces, favoring a calm user experience.',
                 lightBg: '#FFFFFF',
                 darkBg: '#333333',
                 baseColor: '#B5838D',
@@ -131,17 +180,53 @@
         ];
 
         const palettesContainer = document.getElementById('palettes-container');
+        const feedbackElement = document.getElementById('clipboard-feedback');
 
         /**
-         * Converts RGB to Hex. Used internally for robustness, although color input provides hex.
-         * @param {string} c - Color component (0-255).
-         * @returns {string} Hex value.
+         * Copies the provided hex code to the clipboard using a fallback method 
+         * and shows a visual feedback message.
+         * @param {string} hex - The hex code to copy (e.g., "#FF00AA").
          */
-        const componentToHex = (c) => {
-            const hex = parseInt(c).toString(16);
-            return hex.length == 1 ? "0" + hex : hex;
-        }
-        
+        const copyToClipboard = (hex) => {
+            // 1. Create a temporary input element
+            const tempInput = document.createElement('input');
+            tempInput.value = hex;
+            document.body.appendChild(tempInput);
+
+            // 2. Select the text and execute the copy command
+            tempInput.select();
+            // Use document.execCommand('copy') for better compatibility in iframes
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                console.error('Could not copy to clipboard:', err);
+            }
+
+            // 3. Clean up the temporary element
+            document.body.removeChild(tempInput);
+
+            // 4. Show visual feedback
+            if (success) {
+                feedbackElement.textContent = `Copied ${hex}!`;
+                feedbackElement.classList.add('show-feedback');
+                
+                // Hide feedback after a short delay
+                setTimeout(() => {
+                    feedbackElement.classList.remove('show-feedback');
+                }, 1000);
+            }
+        };
+
+        /**
+         * Converts simple markdown bold syntax (**text**) to HTML <strong> tags.
+         * @param {string} text - The text possibly containing markdown.
+         * @returns {string} The text with HTML strong tags applied.
+         */
+        const convertMarkdownToHtml = (text) => {
+            return text.replace(/\*\*([^\*]+)\*\*/g, '<strong>$1</strong>');
+        };
+
         /**
          * Ensures a string is a valid 6-digit hex code, padding or sanitizing as needed.
          * @param {string} hex - The hex string to clean.
@@ -152,8 +237,7 @@
             let cleaned = hex.startsWith('#') ? hex.substring(1) : hex;
             cleaned = cleaned.toUpperCase().trim();
             if (cleaned.length !== 6 || !/^[0-9A-F]{6}$/i.test(cleaned)) {
-                // If invalid, revert to a default or old value logic
-                return '#000000'; // Default safety fallback
+                return '#000000';
             }
             return `#${cleaned}`;
         }
@@ -182,8 +266,12 @@
             const hexTextElement = document.getElementById(`${paletteId}-${role}-${mode}-hex`);
             const colorPickerElement = document.getElementById(`${paletteId}-${role}-${mode}-picker`);
 
-            if (swatchElement) swatchElement.style.backgroundColor = cleanedHex;
-            if (hexTextElement) hexTextElement.value = cleanedHex.substring(1); // Set value without #
+            if (swatchElement) {
+                swatchElement.style.backgroundColor = cleanedHex;
+                // Update the onclick event to copy the new color
+                swatchElement.setAttribute('onclick', `copyToClipboard('${cleanedHex}')`); 
+            }
+            if (hexTextElement) hexTextElement.value = cleanedHex.substring(1); 
             if (colorPickerElement) colorPickerElement.value = cleanedHex;
 
             // Special handling for Base BG to update the whole container background
@@ -213,17 +301,18 @@
             const pickerId = `${palette.id}-${color.role}-${mode}-picker`;
 
             return `
-                <div class="color-swatch-container rounded-lg overflow-hidden shadow-md bg-white">
-                    <div id="${swatchId}" class="h-24 flex items-end p-3" style="background-color: ${hex};">
+                <div class="color-swatch-container rounded-xl overflow-hidden shadow-md bg-white">
+                    <div id="${swatchId}" class="h-24 flex items-end p-3" style="background-color: ${hex};" 
+                        onclick="copyToClipboard('${hex}')">
                         <div class="${textClass} text-xs font-semibold">${hex}</div>
                     </div>
-                    <div class="p-3 bg-gray-50 dark-mode-detail-bg">
-                        <p class="font-medium text-gray-800 text-sm mb-1">${color.role}</p>
+                    <div class="p-3 bg-white">
+                        <p class="font-bold text-gray-800 text-sm mb-2">${color.role}</p>
                         <div class="hex-input-wrapper">
                             <input type="color" id="${pickerId}" class="color-picker" value="${hex}" 
                                 oninput="updateColor('${palette.id}', '${color.role}', '${mode}', this.value)"
                             >
-                            <input type="text" id="${hexId}" class="hex-input text-gray-700" value="${hex.substring(1)}" maxlength="6"
+                            <input type="text" id="${hexId}" class="hex-input text-gray-700 font-mono" value="${hex.substring(1)}" maxlength="6"
                                 onchange="updateColor('${palette.id}', '${color.role}', '${mode}', this.value)"
                                 oninput="this.value = this.value.toUpperCase().replace(/[^0-9A-F]/g, ''); if(this.value.length === 6) updateColor('${palette.id}', '${color.role}', '${mode}', '#' + this.value);"
                             >
@@ -242,23 +331,22 @@
                 const darkSwatches = palette.colors.map(color => createSwatchHtml(palette, color, 'dark')).join('');
 
                 return `
-                    <!-- PALETTE: ${palette.title} -->
-                    <div id="${palette.id}-border" class="bg-white p-6 md:p-10 rounded-xl shadow-lg border-t-4" style="border-top-color: ${palette.baseColor};">
-                        <h2 id="${palette.id}-title" class="text-3xl font-bold mb-6" style="color: ${palette.baseColor};">${palette.title}</h2>
+                    <!-- PALETTE: ${palette.title} --><div id="${palette.id}-border" class="bg-white p-6 md:p-10 rounded-2xl shadow-xl border-t-8" style="border-top-color: ${palette.baseColor};">
+                        <h2 id="${palette.id}-title" class="text-3xl font-bold mb-3" style="color: ${palette.baseColor};">${palette.title}</h2>
                         
-                        <!-- LIGHT MODE -->
-                        <h3 class="text-xl font-bold mb-4 text-gray-700">Light Mode (Base BG: ${palette.lightBg})</h3>
-                        <div id="${palette.id}-light-container" class="p-6 rounded-xl shadow-inner border border-gray-200" style="background-color: ${palette.lightBg};">
+                        <!-- REASON TEXT - Converted from Markdown to HTML Strong tags --><p class="text-gray-600 mb-10 text-lg leading-relaxed">${convertMarkdownToHtml(palette.reason)}</p>
+
+                        <!-- LIGHT MODE --><h3 class="text-2xl font-semibold mb-4 text-gray-800">Light Mode</h3>
+                        <div id="${palette.id}-light-container" class="p-6 rounded-xl shadow-inner border border-gray-100" style="background-color: ${palette.lightBg};">
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
                                 ${lightSwatches}
                             </div>
                         </div>
 
-                        <div class="my-8 h-px bg-gray-200"></div>
+                        <div class="my-10 h-px bg-gray-300"></div>
 
-                        <!-- DARK MODE -->
-                        <h3 class="text-xl font-bold mb-4 text-gray-700">Dark Mode (Base BG: ${palette.darkBg})</h3>
-                        <div id="${palette.id}-dark-container" class="p-6 rounded-xl shadow-inner border" style="background-color: ${palette.darkBg}; border-color: ${palette.baseColor};">
+                        <!-- DARK MODE --><h3 class="text-2xl font-semibold mb-4 text-gray-800">Dark Mode</h3>
+                        <div id="${palette.id}-dark-container" class="p-6 rounded-xl shadow-inner border-2 border-dashed" style="background-color: ${palette.darkBg}; border-color: ${palette.baseColor};">
                             <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6">
                                 ${darkSwatches}
                             </div>
@@ -271,8 +359,9 @@
         // Initial render on load
         window.onload = renderPalettes;
         
-        // Expose updateColor globally for inline HTML event handlers
+        // Expose functions globally for inline HTML event handlers
         window.updateColor = updateColor;
+        window.copyToClipboard = copyToClipboard;
 
     </script>
 </body>
